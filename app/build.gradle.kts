@@ -53,6 +53,7 @@ android {
 
 
 dependencies {
+    val nav_version = "2.8.3"
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -64,10 +65,14 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.retrofit)
     implementation(libs.okhttp)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
+    implementation(libs.androidx.material.icons.extended)
+        implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

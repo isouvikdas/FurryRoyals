@@ -6,6 +6,7 @@ data class User(
     var userId: String = "",
     var username: String = "",
     var phoneNumber: String = "",
+    var password: String = "",
     var email: String = "",
     var otp: String = "",
     var phoneNumberVerified: Boolean = false,
