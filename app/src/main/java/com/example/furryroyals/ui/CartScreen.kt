@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HomeScreen() {
+fun CartScreen() {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -23,7 +23,7 @@ fun HomeScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Home", fontSize = 20.sp)
+            Text(text = "Cart", fontSize = 20.sp)
         }
 
     }

@@ -1,16 +1,13 @@
 package com.example.furryroyals.repository
 
 import android.util.Log
-import com.example.furryroyals.api.ApiResponse
 import com.example.furryroyals.api.AuthApiService
 import com.example.furryroyals.api.LoginRequest
 import com.example.furryroyals.api.OtpRequest
 import com.example.furryroyals.api.PhoneRequest
 import com.example.furryroyals.api.RegisterRequest
 import com.example.furryroyals.api.UserResponse
-import com.example.furryroyals.model.User
 import javax.inject.Inject
-import kotlin.math.log
 
 class UserRepository @Inject constructor(
     private val authApiService: AuthApiService

@@ -29,11 +29,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +55,7 @@ import com.example.furryroyals.ui.component.TextTextField
 fun AnimatedRegisterScreen(
     modifier: Modifier = Modifier,
     registrationViewModel: RegistrationViewModel,
+    registrationUiState: RegistrationUiState,
     onSuccess: () -> Unit,
     onSignInClick: () -> Unit
     ) {
@@ -81,10 +84,11 @@ fun AnimatedRegisterScreen(
             RegisterScreen(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(if(isImeVisible) 0.82f else 0.5f),
+                    .fillMaxHeight(if (isImeVisible) 0.82f else 0.5f),
                 onSuccess = { onSuccess() },
                 onSignInClick = onSignInClick,
-                registrationViewModel = registrationViewModel
+                registrationViewModel = registrationViewModel,
+                registrationUiState = registrationUiState
 
             )
         }
@@ -94,12 +98,18 @@ fun AnimatedRegisterScreen(
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
+    registrationUiState: RegistrationUiState,
     registrationViewModel: RegistrationViewModel,
     onSuccess: () -> Unit,
     onSignInClick: () -> Unit
 ) {
-    val registrationUiState = registrationViewModel.registrationUiState
     var phoneNumber by rememberSaveable { mutableStateOf(registrationUiState.phoneNumber) }
+
+    LaunchedEffect(registrationUiState.isOtpSent) {
+        if (registrationUiState.isOtpSent) {
+            onSuccess()
+        }
+    }
 
     Surface(
         modifier = modifier
@@ -213,10 +223,6 @@ fun RegisterScreen(
                     fontSize = 14.sp,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-            }
-
-            if (registrationUiState.isOtpSent) {
-                onSuccess()
             }
         }
     }

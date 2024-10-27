@@ -1,6 +1,5 @@
 package com.example.furryroyals.api
 
-import com.example.furryroyals.model.User
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

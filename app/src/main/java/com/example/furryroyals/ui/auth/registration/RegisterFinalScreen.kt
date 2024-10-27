@@ -49,8 +49,8 @@ import com.example.furryroyals.ui.component.TextTextField
 fun AnimatedRegisterFinalScreen(
     modifier: Modifier = Modifier,
     registrationViewModel: RegistrationViewModel,
+    registrationUiState: RegistrationUiState,
     onSuccess: () -> Unit,
-    onSignInClick: () -> Unit
 ) {
     var visible by remember { mutableStateOf(false) }
     val isImeVisible by rememberImeState()
@@ -79,8 +79,8 @@ fun AnimatedRegisterFinalScreen(
                     .fillMaxWidth()
                     .fillMaxHeight(if (isImeVisible) 0.82f else 0.5f),
                 onSuccess = { onSuccess() },
-                onSignInClick = onSignInClick,
-                registrationViewModel = registrationViewModel
+                registrationViewModel = registrationViewModel,
+                registrationUiState = registrationUiState
 
             )
         }
@@ -91,13 +91,18 @@ fun AnimatedRegisterFinalScreen(
 fun RegisterFinalScreen(
     modifier: Modifier = Modifier,
     registrationViewModel: RegistrationViewModel,
+    registrationUiState: RegistrationUiState,
     onSuccess: () -> Unit,
-    onSignInClick: () -> Unit,
 ) {
-    val registrationUiState = registrationViewModel.registrationUiState
 
     var username by rememberSaveable { mutableStateOf(registrationUiState.username) }
-    var password by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf(registrationUiState.password) }
+
+    LaunchedEffect(registrationUiState.registrationSuccess) {
+        if (registrationUiState.registrationSuccess) {
+            onSuccess()
+        }
+    }
 
     Surface(
         modifier = modifier
@@ -136,7 +141,7 @@ fun RegisterFinalScreen(
             TextTextField(
                 value = username,
                 onValueChange = { username = it },
-                hint = "Mobile Number",
+                hint = "Name",
                 leadingIcon = Icons.Default.AccountCircle,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -181,24 +186,6 @@ fun RegisterFinalScreen(
                 }
             }
 
-            Row(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(vertical = 10.dp)
-            ) {
-                Text(
-                    text = "Already have an account? ",
-                    fontSize = 16.sp,
-                    color = Color.Black
-                )
-                Text(
-                    text = "Sign In",
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable { onSignInClick() }
-                )
-            }
-
             Spacer(modifier = Modifier.height(1.dp))
 
             registrationUiState.errorMessage?.let { errorMessage ->
@@ -208,10 +195,6 @@ fun RegisterFinalScreen(
                     fontSize = 14.sp,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-            }
-
-            if (registrationUiState.registrationSuccess) {
-                onSuccess()
             }
         }
     }

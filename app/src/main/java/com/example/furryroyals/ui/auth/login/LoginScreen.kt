@@ -54,6 +54,8 @@ import kotlin.math.log
 @Composable
 fun AnimatedLoginScreen(
     modifier: Modifier = Modifier,
+    loginViewModel: LoginViewModel,
+    loginUiState: LoginUiState,
     onLoginSuccess: () -> Unit,
     onSingUpClick: () -> Unit
 ) {
@@ -84,7 +86,9 @@ fun AnimatedLoginScreen(
                     .fillMaxWidth()
                     .fillMaxHeight(if (isImeVisible) 0.905f else 0.6f),
                 onLoginSuccess = onLoginSuccess,
-                onSingUpClick = onSingUpClick
+                onSingUpClick = onSingUpClick,
+                loginViewModel = loginViewModel,
+                loginUiState = loginUiState
 
             )
         }
@@ -94,14 +98,20 @@ fun AnimatedLoginScreen(
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
+    loginViewModel: LoginViewModel,
+    loginUiState: LoginUiState,
     onLoginSuccess: () -> Unit,
     onSingUpClick: () -> Unit
 ) {
-    val loginViewModel: LoginViewModel = hiltViewModel()
-    val loginUiState = loginViewModel.loginUiState
 
     var phoneNumber by rememberSaveable { mutableStateOf(loginUiState.phoneNumber) }
     var password by rememberSaveable { mutableStateOf(loginUiState.password) }
+    
+    LaunchedEffect(loginUiState.loginSuccess) {
+        if (loginUiState.loginSuccess) {
+            onLoginSuccess()
+        }
+    }
 
     Surface(
         modifier = modifier
@@ -172,6 +182,7 @@ fun LoginScreen(
                 Text(
                     text = "Forgot Password?",
                     fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable { }
                 )
             }
@@ -227,10 +238,6 @@ fun LoginScreen(
                     fontSize = 14.sp,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-            }
-
-            if (loginUiState.loginSuccess) {
-                onLoginSuccess()
             }
         }
     }

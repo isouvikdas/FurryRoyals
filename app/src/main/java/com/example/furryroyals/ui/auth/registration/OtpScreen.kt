@@ -26,6 +26,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,7 +49,7 @@ fun AnimatedOtpScreen(
     modifier: Modifier = Modifier,
     onSuccess: () -> Unit,
     registrationViewModel: RegistrationViewModel,
-    onSignInClick: () -> Unit
+    registrationUiState: RegistrationUiState,
     ) {
     var visible by remember { mutableStateOf(false) }
     val isImeVisible by rememberImeState()
@@ -75,10 +76,10 @@ fun AnimatedOtpScreen(
             OtpScreen(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(if (isImeVisible) 0.82f else 0.5f),
+                    .fillMaxHeight(if (isImeVisible) 0.68f else 0.45f),
                 onSuccess = { onSuccess() },
-                onSignInClick = onSignInClick,
-                registrationViewModel = registrationViewModel
+                registrationViewModel = registrationViewModel,
+                registrationUiState = registrationUiState,
 
             )
         }
@@ -88,11 +89,17 @@ fun AnimatedOtpScreen(
 @Composable
 fun OtpScreen(
     modifier: Modifier = Modifier,
+    registrationUiState: RegistrationUiState,
     registrationViewModel: RegistrationViewModel,
-    onSignInClick: () -> Unit,
     onSuccess: () -> Unit
 ) {
-    val registrationUiState = registrationViewModel.registrationUiState
+    val otp = rememberSaveable { mutableStateOf(registrationUiState.otp) }
+
+    LaunchedEffect(registrationUiState.isOtpVerified) {
+        if (registrationUiState.isOtpVerified) {
+            onSuccess()
+        }
+    }
 
     Surface(
         modifier = modifier
@@ -136,13 +143,10 @@ fun OtpScreen(
 
             Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
-            val otp = remember {
-                mutableStateOf("")
-            }
 
             OtpInputField(
-                otp = otp,  // Use otpState to track the OTP input
-                count = 6,  // Number of OTP boxes
+                otp = otp,
+                count = 6,
                 textColor = Color.Black,
                 otpBoxModifier = Modifier
                     .border(
@@ -178,7 +182,7 @@ fun OtpScreen(
                 if (registrationUiState.isLoading) {
                     CircularProgressIndicator(
                         color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(20.dp)
                     )
                 } else {
                     Text(
@@ -190,27 +194,9 @@ fun OtpScreen(
                 }
             }
 
-            Row(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(vertical = 10.dp)
-            ) {
-                Text(
-                    text = "Already have an account? ",
-                    fontSize = 16.sp,
-                    color = Color.Black
-                )
-                Text(
-                    text = "Sign In",
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable { onSignInClick() }
-                )
-            }
 
             Spacer(modifier = Modifier.height(1.dp))
 
-            // Display any error message
             registrationUiState.errorMessage?.let { errorMessage ->
                 Text(
                     text = errorMessage,
@@ -220,10 +206,7 @@ fun OtpScreen(
                 )
             }
 
-            // Display a success message if registration is successful
-            if (registrationUiState.isOtpVerified) {
-                onSuccess()
-            }
+
         }
     }
 }
