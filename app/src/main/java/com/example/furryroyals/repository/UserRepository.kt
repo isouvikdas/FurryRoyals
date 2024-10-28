@@ -108,6 +108,7 @@ class UserRepository @Inject constructor(
                     Log.d("LoginUser", "username: ${userResponse.username}")
                     Log.d("LoginUser", "email: ${userResponse.email}")
                     Log.d("LoginUser", "token: ${userResponse.token}")
+                    Log.d("LoginUser", "expirationTime: ${userResponse.expirationTime}")
                     Result.success(userResponse)
                 } else {
                     Log.e("LoginUser", "Login failed: Empty response body")

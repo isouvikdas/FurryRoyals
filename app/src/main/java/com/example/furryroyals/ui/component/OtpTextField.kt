@@ -42,7 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.furryroyals.ui.theme.FurryRoyalsTheme
+import com.example.compose.FurryRoyalsTheme
 import kotlinx.coroutines.launch
 
 private data class OtpField(

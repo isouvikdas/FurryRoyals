@@ -16,7 +16,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://3cf1-2405-201-ac02-d151-efe8-faf4-11a9-35e3.ngrok-free.app") // replace with your actual base URL
+            .baseUrl("https://7177-2405-201-ac02-d151-70c5-63fe-569c-c60a.ngrok-free.app") // replace with your actual base URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

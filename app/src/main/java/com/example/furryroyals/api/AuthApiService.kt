@@ -3,6 +3,7 @@ package com.example.furryroyals.api
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
+import java.util.Date
 
 interface AuthApiService {
 
@@ -21,7 +22,8 @@ interface AuthApiService {
 }
 
 data class UserResponse(val userId: String, val username: String, val email: String,
-                        val phoneNumber: String, val token: String)
+                        val phoneNumber: String, val token: String, val expirationTime: Long
+)
 data class ApiResponse<T>(val message: String, val success: Boolean, val data: T)
 data class LoginRequest(val phoneNumber: String, val password: String)
 data class PhoneRequest(val phoneNumber: String)

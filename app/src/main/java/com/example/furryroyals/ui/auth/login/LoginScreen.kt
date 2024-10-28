@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.furryroyals.ui.isSmallScreenHeight
 import com.example.furryroyals.ui.rememberImeState
-import com.example.furryroyals.ui.theme.FurryRoyalsTheme
 import com.example.furryroyals.ui.component.PasswordTextField
 import com.example.furryroyals.ui.component.TextTextField
 import kotlin.math.log
@@ -236,7 +235,9 @@ fun LoginScreen(
                     text = errorMessage,
                     color = MaterialTheme.colorScheme.error,
                     fontSize = 14.sp,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(vertical = 8.dp)
                 )
             }
         }

@@ -48,7 +48,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.furryroyals.ui.isSmallScreenHeight
 import com.example.furryroyals.ui.rememberImeState
-import com.example.furryroyals.ui.theme.FurryRoyalsTheme
 import com.example.furryroyals.ui.component.TextTextField
 
 @Composable

@@ -1,7 +1,9 @@
 package com.example.furryroyals.ui.auth.registration
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.furryroyals.repository.AuthRepository
 import com.example.furryroyals.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +28,8 @@ data class RegistrationUiState(
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _registrationUiState = MutableStateFlow(RegistrationUiState())
@@ -80,6 +83,13 @@ class RegistrationViewModel @Inject constructor(
             _registrationUiState.update { it.copy(isLoading = true) }
             val result = userRepository.registerUser(_registrationUiState.value.phoneNumber, username, password)
             _registrationUiState.update {
+                val token = result.getOrNull()?.token
+                val expirationTime = result.getOrNull()?.expirationTime
+                if (token != null && expirationTime != null) {
+                    authRepository.saveToken(token, expirationTime)
+                    Log.d("jwt", "token: $token")
+                    Log.d("jwt", "expirationTime: $expirationTime")
+                }
                 if (result.isSuccess) {
                     it.copy(
                         isLoading = false,
