@@ -32,9 +32,9 @@ sealed class Screen(val route: String) {
 @Composable
 fun AppNavigation(
     navController: NavHostController,
-    onBottomBarVisibilityChanged: (Boolean) -> Unit
+    onBottomBarVisibilityChanged: (Boolean) -> Unit,
+    onButtonsVisibilityChanged: (Boolean) -> Unit
 ) {
-
     val registrationViewModel: RegistrationViewModel = hiltViewModel()
     val registrationUiState by registrationViewModel.registrationUiState.collectAsStateWithLifecycle()
 
@@ -45,23 +45,28 @@ fun AppNavigation(
     val isLoggedIn by authViewModel.isLoggedIn.collectAsStateWithLifecycle()
 
     NavHost(navController = navController, startDestination = BottomNavigationItems.Home.route) {
+
         composable(route = BottomNavigationItems.Home.route) {
             onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
             HomeScreen(navController = navController)
         }
 
-        composable(BottomNavigationItems.Cart.route) {
+        composable(route = BottomNavigationItems.Cart.route) {
             onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
             CartScreen()
         }
 
-        composable(BottomNavigationItems.Category.route) {
+        composable(route = BottomNavigationItems.Category.route) {
             onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
             CategoryScreen()
         }
 
-        composable(BottomNavigationItems.Profile.route) {
+        composable(route = BottomNavigationItems.Profile.route) {
             onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
             if (isLoggedIn) {
                 ProfileScreen()
             } else {
@@ -78,10 +83,9 @@ fun AppNavigation(
             }
         }
 
-
-
         composable(route = Screen.Register.route) {
             onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
             AnimatedRegisterScreen(
                 onSuccess = { navController.navigate(Screen.Otp.route) },
                 onSignInClick = { navController.navigate(Screen.Login.route) },
@@ -92,6 +96,7 @@ fun AppNavigation(
 
         composable(route = Screen.Otp.route) {
             onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
             AnimatedOtpScreen(
                 onSuccess = { navController.navigate(Screen.FinalRegister.route) },
                 registrationViewModel = registrationViewModel,
@@ -101,6 +106,7 @@ fun AppNavigation(
 
         composable(route = Screen.FinalRegister.route) {
             onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
             AnimatedRegisterFinalScreen(
                 onSuccess = {
                     navController.navigate(BottomNavigationItems.Home.route) {
@@ -112,8 +118,6 @@ fun AppNavigation(
                 registrationViewModel = registrationViewModel,
                 registrationUiState = registrationUiState
             )
-
         }
-
     }
 }

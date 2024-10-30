@@ -17,6 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.FurryRoyalsTheme
 import com.example.furryroyals.bottomNav.BottomAppbar
+import com.example.furryroyals.bottomNav.BottomNavigationItems
 import com.example.furryroyals.topNav.TopAppbar
 import com.example.furryroyals.ui.navigation.AppNavigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,39 +31,37 @@ class MainActivity : ComponentActivity() {
             FurryRoyalsTheme {
                 val navController: NavHostController = rememberNavController()
                 var bottomBarVisible by remember { mutableStateOf(true) }
-                var topBarVisible by remember { mutableStateOf(true) }
+                var cartButtonVisibility by remember { mutableStateOf(true) }
 
                 Scaffold(
                     topBar = {
-                        if (topBarVisible) {
-                            TopAppbar(
-                                navController = navController,
-                                modifier = Modifier
+                        TopAppbar(
+                            navController = navController,
+                            modifier = Modifier,
+                            cartButtonVisibility = cartButtonVisibility,
 
-                            )
-                        }
+                        )
                     },
-
-                    bottomBar =
-                    {
+                    bottomBar = {
                         if (bottomBarVisible) {
-                            BottomAppbar(
-                                navController = navController,
-                                modifier = Modifier
-                            )
-                        }
-                    }) { paddingValues ->
-                    Box(
-                        modifier = Modifier.padding(paddingValues)
-                    ) {
-                        AppNavigation(navController = navController) { isVisible ->
-                            bottomBarVisible = isVisible
+                            BottomAppbar(navController = navController, modifier = Modifier)
                         }
                     }
-                }
-            }
+                ) { paddingValues ->
+                    Box(modifier = Modifier.padding(paddingValues)) {
+                        AppNavigation(
+                            navController = navController,
+                            onBottomBarVisibilityChanged = { bottomBarVisible = it },
+                            onButtonsVisibilityChanged = { cartButtonVisibility = it }
 
+                        )
+                    }
+                }
+
+            }
         }
+
     }
 }
+
 
