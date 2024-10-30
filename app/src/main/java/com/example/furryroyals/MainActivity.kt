@@ -12,10 +12,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.FurryRoyalsTheme
 import com.example.furryroyals.bottomNav.BottomAppbar
+import com.example.furryroyals.topNav.TopAppbar
 import com.example.furryroyals.ui.navigation.AppNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,28 +25,38 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
         setContent {
             FurryRoyalsTheme {
                 val navController: NavHostController = rememberNavController()
-                var buttonsVisible by remember {
-                    mutableStateOf(true)
-                }
+                var bottomBarVisible by remember { mutableStateOf(true) }
+                var topBarVisible by remember { mutableStateOf(true) }
 
-                Scaffold(bottomBar =
-                {
-                    if (buttonsVisible) {
-                        BottomAppbar(
-                            navController = navController,
-                            modifier = Modifier
-                        )
-                    }
-                }) { paddingValues ->
+                Scaffold(
+                    topBar = {
+                        if (topBarVisible) {
+                            TopAppbar(
+                                navController = navController,
+                                modifier = Modifier
+
+                            )
+                        }
+                    },
+
+                    bottomBar =
+                    {
+                        if (bottomBarVisible) {
+                            BottomAppbar(
+                                navController = navController,
+                                modifier = Modifier
+                            )
+                        }
+                    }) { paddingValues ->
                     Box(
                         modifier = Modifier.padding(paddingValues)
                     ) {
                         AppNavigation(navController = navController) { isVisible ->
-                            buttonsVisible = isVisible
+                            bottomBarVisible = isVisible
                         }
                     }
                 }

@@ -38,7 +38,7 @@ class RegistrationViewModel @Inject constructor(
     fun sendOtp(phoneNumber: String) {
         viewModelScope.launch {
             _registrationUiState.update { it.copy(isLoading = true) }
-            val result = userRepository.sendOtp(phoneNumber)
+            val result = authRepository.sendOtp(phoneNumber)
             _registrationUiState.update {
                 if (result.isSuccess) {
                     it.copy(
@@ -60,7 +60,7 @@ class RegistrationViewModel @Inject constructor(
     fun verifyOtp(phoneNumber: String, otp: String) {
         viewModelScope.launch {
             _registrationUiState.update { it.copy(isLoading = true) }
-            val result = userRepository.verifyOtp(phoneNumber, otp)
+            val result = authRepository.verifyOtp(phoneNumber, otp)
             _registrationUiState.update {
                 if (result.isSuccess) {
                     it.copy(
@@ -81,14 +81,19 @@ class RegistrationViewModel @Inject constructor(
     fun registerUser(username: String, password: String) {
         viewModelScope.launch {
             _registrationUiState.update { it.copy(isLoading = true) }
-            val result = userRepository.registerUser(_registrationUiState.value.phoneNumber, username, password)
+            val phoneNumber = _registrationUiState.value.phoneNumber
+            val result = authRepository.registerUser(phoneNumber, username, password)
             _registrationUiState.update {
                 val token = result.getOrNull()?.token
                 val expirationTime = result.getOrNull()?.expirationTime
-                if (token != null && expirationTime != null) {
-                    authRepository.saveToken(token, expirationTime)
-                    Log.d("jwt", "token: $token")
-                    Log.d("jwt", "expirationTime: $expirationTime")
+                val userId = result.getOrNull()?.userId
+                if (token != null && expirationTime != null && userId != null) {
+                    userRepository.saveUserData(token, expirationTime, userId, phoneNumber, username)
+                    Log.d("RegisterUser", "token: $token")
+                    Log.d("RegisterUser", "expirationTime: $expirationTime")
+                    Log.d("RegisterUser", "userId: $userId")
+                    Log.d("RegisterUser", "phoneNumber: $phoneNumber")
+                    Log.d("RegisterUser", "username: $username")
                 }
                 if (result.isSuccess) {
                     it.copy(

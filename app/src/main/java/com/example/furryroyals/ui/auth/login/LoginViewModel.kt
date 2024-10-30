@@ -34,15 +34,25 @@ class LoginViewModel @Inject constructor(
     fun login(phoneNumber: String, password: String) {
         viewModelScope.launch {
             _loginUiState.update { it.copy(isLoading = true) }
-            val result = userRepository.loginUser(phoneNumber, password)
+            val result = authRepository.loginUser(phoneNumber, password)
             _loginUiState.update {
                 if (result.isSuccess) {
                     val token = result.getOrNull()?.token
                     val expirationTime = result.getOrNull()?.expirationTime
-                    if (token != null && expirationTime != null) {
-                        authRepository.saveToken(token, expirationTime)
-                        Log.d("jwt", "token: $token")
-                        Log.d("jwt", "expirationTime: $expirationTime")
+                    val userId = result.getOrNull()?.userId
+                    val username = result.getOrNull()?.username
+                    val email = result.getOrNull()?.email
+                    if (token != null && expirationTime != null && userId != null && username != null) {
+                        userRepository.saveUserData(token, expirationTime, userId, phoneNumber, username)
+                        Log.d("Login", "token: $token")
+                        Log.d("Login", "expirationTime: $expirationTime")
+                        Log.d("Login", "userId: $userId")
+                        Log.d("Login", "phoneNumber: $phoneNumber")
+                        Log.d("Login", "username: $username")
+                    }
+                    if (email != null)  {
+                        userRepository.saveUserData(email)
+                        Log.d("Login", "email: $email")
                     }
                     it.copy(
                         loginSuccess = true,

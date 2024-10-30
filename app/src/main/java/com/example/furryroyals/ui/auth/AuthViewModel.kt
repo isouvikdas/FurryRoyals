@@ -2,7 +2,7 @@ package com.example.furryroyals.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.furryroyals.repository.AuthRepository
+import com.example.furryroyals.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _isLoggedIn = MutableStateFlow(false)
@@ -24,7 +24,7 @@ class AuthViewModel @Inject constructor(
 
     private fun checkTokenValidity() {
         viewModelScope.launch {
-            _isLoggedIn.value = authRepository.isLoggedIn()
+            _isLoggedIn.value = userRepository.isLoggedIn()
         }
     }
 }

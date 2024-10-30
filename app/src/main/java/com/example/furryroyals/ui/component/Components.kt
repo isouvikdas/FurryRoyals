@@ -157,32 +157,4 @@ fun OTPTextField(
 
 
 
-//@Preview
-//@Composable
-//fun TextFieldPreview() {
-//    FurryRoyalsTheme {
-//        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//            Button(onClick = { /*TODO*/ },
-//                colors = ) {
-//                Text(text = )
-//
-//            }
-//        }
-//    }
-//}
-//
-//@Preview
-//@Composable
-//fun PasswordPreview() {
-//    FurryRoyalsTheme {
-//        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//            var text by remember { mutableStateOf("") }
-//            PasswordTextField(
-//                modifier = Modifier.padding(innerPadding),
-//                value = text,
-//                hint = "password"
-//            )
-//        }
-//    }
-//}
 
