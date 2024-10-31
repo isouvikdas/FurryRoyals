@@ -1,8 +1,6 @@
 package com.example.furryroyals.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -11,22 +9,31 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.furryroyals.bottomNav.BottomNavigationItems
 import com.example.furryroyals.ui.auth.AuthViewModel
-import com.example.furryroyals.ui.cart.CartScreen
-import com.example.furryroyals.ui.category.CategoryScreen
-import com.example.furryroyals.ui.home.HomeScreen
-import com.example.furryroyals.ui.profile.ProfileScreen
 import com.example.furryroyals.ui.auth.login.AnimatedLoginScreen
 import com.example.furryroyals.ui.auth.login.LoginViewModel
 import com.example.furryroyals.ui.auth.registration.AnimatedOtpScreen
 import com.example.furryroyals.ui.auth.registration.AnimatedRegisterFinalScreen
 import com.example.furryroyals.ui.auth.registration.AnimatedRegisterScreen
 import com.example.furryroyals.ui.auth.registration.RegistrationViewModel
+import com.example.furryroyals.ui.cart.CartScreen
+import com.example.furryroyals.ui.category.CategoryScreen
+import com.example.furryroyals.ui.home.HomeScreen
+import com.example.furryroyals.ui.profile.AnimatedSignOutDialogue
+import com.example.furryroyals.ui.profile.ProfileScreen
+import com.example.furryroyals.ui.profile.ProfileViewModel
+import com.example.furryroyals.ui.profile.accountDetail.AccountDetailScreen
+import com.example.furryroyals.ui.profile.address.AddressScreen
+import com.example.furryroyals.ui.profile.orders.MyOrdersScreen
 
 sealed class Screen(val route: String) {
     data object Login : Screen("Login")
     data object Register : Screen("Register")
     data object Otp : Screen("Otp")
     data object FinalRegister : Screen("FinalRegister")
+    data object AccountDetail : Screen("AccountDetail")
+    data object Address : Screen("Address")
+    data object MyOrders : Screen("MyOrders")
+    data object SignOut : Screen("SignOut")
 }
 
 @Composable
@@ -43,6 +50,9 @@ fun AppNavigation(
 
     val authViewModel: AuthViewModel = hiltViewModel()
     val isLoggedIn by authViewModel.isLoggedIn.collectAsStateWithLifecycle()
+
+    val profileViewModel: ProfileViewModel = hiltViewModel()
+    val profileUiState by profileViewModel.profileUiState.collectAsStateWithLifecycle()
 
     NavHost(navController = navController, startDestination = BottomNavigationItems.Home.route) {
 
@@ -68,7 +78,28 @@ fun AppNavigation(
             onBottomBarVisibilityChanged(true)
             onButtonsVisibilityChanged(false)
             if (isLoggedIn) {
-                ProfileScreen()
+                ProfileScreen(
+                    profileUiState = profileUiState,
+                    onAccountDetailClick = {
+                        navController.navigate(Screen.AccountDetail.route) {
+                            popUpTo(BottomNavigationItems.Profile.route) { inclusive = true }
+                        }
+                    },
+                    onOrdersClick = {
+                        navController.navigate(Screen.MyOrders.route) {
+                            popUpTo(BottomNavigationItems.Profile.route) { inclusive = true }
+                        }
+                    },
+
+                    onAddressClick = {
+                        navController.navigate(Screen.Address.route) {
+                            popUpTo(BottomNavigationItems.Profile.route) { inclusive = true }
+                        }
+                    },
+//                    onSignOutClick = {
+//                        navController.navigate(Screen.SignOut.route)
+//                    }
+                )
             } else {
                 AnimatedLoginScreen(
                     onLoginSuccess = {
@@ -81,6 +112,43 @@ fun AppNavigation(
                     loginUiState = loginUiState
                 )
             }
+        }
+
+//        composable(route = Screen.SignOut.route) {
+//            onBottomBarVisibilityChanged(false)
+//            onButtonsVisibilityChanged(false)
+//            AnimatedSignOutDialogue(
+//                profileViewModel = profileViewModel,
+//                profileUiState = profileUiState,
+//                onSignOutSuccess = {
+//                    navController.navigate(BottomNavigationItems.Home.route) {
+//                        popUpTo(Screen.SignOut.route) { inclusive = true }
+//                    }
+//                },
+//                onCancelClick = {
+//                    navController.navigate(BottomNavigationItems.Profile.route) {
+//                        popUpTo(Screen.SignOut.route) { inclusive = true }
+//                    }
+//                }
+//            )
+//        }
+
+        composable(route = Screen.AccountDetail.route) {
+            onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
+            AccountDetailScreen()
+        }
+
+        composable(route = Screen.Address.route) {
+            onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
+            AddressScreen()
+        }
+
+        composable(route = Screen.MyOrders.route) {
+            onBottomBarVisibilityChanged(true)
+            onButtonsVisibilityChanged(false)
+            MyOrdersScreen()
         }
 
         composable(route = Screen.Register.route) {

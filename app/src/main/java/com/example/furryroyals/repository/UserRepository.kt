@@ -70,7 +70,26 @@ class UserRepository(
         return token != null && System.currentTimeMillis() < expirationTime
     }
 
-    fun clearToken() {
-        sharedPreferences.edit().remove(TOKEN_KEY).remove(EXPIRATION_TIME_KEY).apply()
+    fun clearToken(): Result<Boolean> {
+        return try {
+            val isSuccess = sharedPreferences.edit()
+                .remove(TOKEN_KEY)
+                .remove(EXPIRATION_TIME_KEY)
+                .commit()
+            Result.success(isSuccess)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
+
+    fun removeUserData() {
+        sharedPreferences.edit().apply {
+            remove(USER_ID_KEY)
+            remove(EMAIL_KEY)
+            remove(PHONE_NUMBER_KEY)
+            remove(USERNAME_KEY)
+            apply()
+        }
+    }
+
 }
