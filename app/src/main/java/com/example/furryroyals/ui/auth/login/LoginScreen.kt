@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,15 +39,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.furryroyals.ui.isSmallScreenHeight
-import com.example.furryroyals.ui.rememberImeState
 import com.example.furryroyals.ui.component.PasswordTextField
 import com.example.furryroyals.ui.component.TextTextField
-import kotlin.math.log
+import com.example.furryroyals.ui.isSmallScreenHeight
+import com.example.furryroyals.ui.rememberImeState
 
 @Composable
 fun AnimatedLoginScreen(

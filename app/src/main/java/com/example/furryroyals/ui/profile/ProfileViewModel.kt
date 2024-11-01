@@ -42,27 +42,4 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun logOut() {
-        viewModelScope.launch {
-            _profileUiState.update { it.copy(isLoading = true) }
-            val result = userRepository.clearToken()
-            if (result.isSuccess) {
-                userRepository.removeUserData()
-                _profileUiState.update {
-                    it.copy(
-                        logOutSuccess = true,
-                        errorMessage = null,
-                        isLoading = false
-                    )
-                }
-            } else {
-                _profileUiState.update {
-                    it.copy(
-                        errorMessage = result.exceptionOrNull()?.message,
-                        isLoading = false
-                    )
-                }
-            }
-        }
-    }
 }

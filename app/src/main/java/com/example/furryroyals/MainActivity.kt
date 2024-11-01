@@ -17,7 +17,6 @@ import com.example.compose.FurryRoyalsTheme
 import com.example.furryroyals.bottomNav.BottomAppbar
 import com.example.furryroyals.topNav.TopAppbar
 import com.example.furryroyals.ui.navigation.AppNavigation
-import com.example.furryroyals.ui.profile.SignOutDialogue
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

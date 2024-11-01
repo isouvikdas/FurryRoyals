@@ -18,6 +18,9 @@ class AuthViewModel @Inject constructor(
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
 
+    private val _resetKey = MutableStateFlow(0)
+    val resetKey: StateFlow<Int> = _resetKey.asStateFlow()
+
     init {
         checkTokenValidity()
     }
@@ -25,6 +28,16 @@ class AuthViewModel @Inject constructor(
     private fun checkTokenValidity() {
         viewModelScope.launch {
             _isLoggedIn.value = userRepository.isLoggedIn()
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            val result = userRepository.clearUserData()
+            if (result.isSuccess) {
+                _isLoggedIn.value = false
+                _resetKey.value += 1
+            }
         }
     }
 }
