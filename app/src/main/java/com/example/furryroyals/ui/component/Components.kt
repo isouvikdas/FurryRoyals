@@ -1,10 +1,15 @@
 package com.example.furryroyals.ui.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -25,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -123,36 +130,54 @@ fun PasswordTextField(
 }
 
 @Composable
-fun OTPTextField(
-    modifier: Modifier = Modifier,
-    length: Int = 6,
-    onOtpEntered: (String) -> Unit
+fun ProfileTextField(
+    modifier: Modifier,
+    leadingIcon: ImageVector,
+    trailingIcon: ImageVector?,
+    text: String
 ) {
-    var otpCode by remember { mutableStateOf("") }
 
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceEvenly
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center
     ) {
-        repeat(length) { index ->
-            OutlinedTextField(
-                value = otpCode.getOrNull(index)?.toString() ?: "",
-                onValueChange = { newValue ->
-                    if (newValue.length <= 1 && otpCode.length < length) {
-                        otpCode += newValue
-                    }
-                    onOtpEntered(otpCode)
-                },
-                singleLine = true,
-                textStyle = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center),
-                modifier = Modifier
-                    .width(43.dp)
-                    .height(46.dp)
-                    .padding(4.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Spacer(modifier = Modifier.width(18.dp))
+            Image(
+                imageVector = leadingIcon,
+                contentDescription = null,
+                modifier = Modifier.size(28.dp)
             )
+
+            Text(
+                text = text,
+                fontSize = 17.sp,
+                color = Color.Black,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            trailingIcon?.let {
+                Image(
+                    imageVector = it,
+                    contentDescription = null,
+                    modifier = Modifier.size(17.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+
+            Spacer(modifier = Modifier.width(18.dp))
+
         }
+
+        HorizontalDivider(modifier = Modifier.padding(horizontal = 18.dp, vertical = 2.dp))
+
     }
+
 }
 
 

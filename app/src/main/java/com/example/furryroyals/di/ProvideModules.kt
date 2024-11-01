@@ -18,7 +18,7 @@ object AuthModule {
 
     @Singleton
     @Provides
-    fun provideAuthRepository(@ApplicationContext context: Context): UserRepository {
+    fun provideUserRepository(@ApplicationContext context: Context): UserRepository {
         val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         return UserRepository(sharedPreferences)
     }
@@ -27,7 +27,7 @@ object AuthModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://46e2-2405-201-ac02-d151-9-658c-69c0-80f2.ngrok-free.app") // replace with your actual base URL
+            .baseUrl("https://7c12-2405-201-ac02-d151-d890-18a2-910a-a740.ngrok-free.app") // replace with your actual base URL
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

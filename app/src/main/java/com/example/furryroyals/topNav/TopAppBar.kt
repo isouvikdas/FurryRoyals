@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -21,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,53 +41,56 @@ fun TopAppbar(
     modifier: Modifier,
     cartButtonVisibility: Boolean,
 ) {
-    NavigationBar(
-        modifier = modifier.fillMaxHeight(0.085f),
-        containerColor = Color.White,
-        tonalElevation = 20.dp
+    Box(
+        modifier = modifier
+            .fillMaxHeight(0.085f)
+            .shadow(1.dp, shape = RoundedCornerShape(0.dp)) // Add elevation here
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+        NavigationBar(
+            containerColor = Color.White,
+        ) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(0.68f)
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.furryroyals_high_resolution_logo_transparent5),
-                contentDescription = "Logo",
+            Row(
                 modifier = Modifier
-                    .height(80.dp)
-                    .width(130.dp)
-                    .align(Alignment.CenterVertically)
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            if (cartButtonVisibility) {
-                BottomNavigationItems.Cart?.let {
-                    NavigationBarItem(
-                        icon = { Icon(imageVector = it.icon!!, contentDescription = null) },
-                        selected = currentRoute == it.route,
-                        onClick = {
-                            if (currentRoute != it.route) { // Prevent redundant navigation
-                                navController.navigate(it.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+                    .fillMaxWidth(0.68f)
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.furryroyals_high_resolution_logo_transparent5),
+                    contentDescription = "Logo",
+                    modifier = Modifier
+                        .height(80.dp)
+                        .width(130.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (cartButtonVisibility) {
+                    BottomNavigationItems.Cart?.let {
+                        NavigationBarItem(
+                            icon = { Icon(imageVector = it.icon!!, contentDescription = null) },
+                            selected = currentRoute == it.route,
+                            onClick = {
+                                if (currentRoute != it.route) { // Prevent redundant navigation
+                                    navController.navigate(it.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
                                 }
                             }
-                        }
-                    )
-
+                        )
+                    }
                 }
             }
         }
