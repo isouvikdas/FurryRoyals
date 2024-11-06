@@ -27,7 +27,7 @@ object AuthModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://7c12-2405-201-ac02-d151-d890-18a2-910a-a740.ngrok-free.app") // replace with your actual base URL
+            .baseUrl("https://fdec-2405-201-ac02-d151-cbf6-2db2-20d9-362f.ngrok-free.app")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

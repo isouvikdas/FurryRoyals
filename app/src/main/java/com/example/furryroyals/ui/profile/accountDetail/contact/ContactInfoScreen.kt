@@ -1,4 +1,4 @@
-package com.example.furryroyals.ui.profile.accountDetail
+package com.example.furryroyals.ui.profile.accountDetail.contact
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.PhoneIphone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,9 +27,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,13 +38,10 @@ import com.example.compose.FurryRoyalsTheme
 import com.example.furryroyals.R
 
 @Composable
-fun AccountDetailScreen(
-    onUsernameClick: () -> Unit,
-    onContactClick: () -> Unit,
-    onBackClick: () -> Unit,
-    username: String,
+fun ContactInfoScreen(
     email: String,
-    phoneNumber: String
+    phoneNumber: String,
+    onEmailClick: () -> Unit
 ) {
     Surface(
         modifier = Modifier
@@ -54,7 +53,6 @@ fun AccountDetailScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
 
             Row(
                 modifier = Modifier
@@ -75,7 +73,7 @@ fun AccountDetailScreen(
 
 
                 Text(
-                    text = "Account Detail",
+                    text = "Contact Information",
                     modifier = Modifier
                         .padding(horizontal = 15.dp)
                         .align(Alignment.CenterVertically),
@@ -85,7 +83,7 @@ fun AccountDetailScreen(
             }
 
             Text(
-                text = "Furryroyals uses this information to verify your identify and to keep our community safe.",
+                text = "Manage your mobile numbers and email addresses to make sure your contact info is accurate and up to date.",
                 fontSize = 16.sp,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
                 fontWeight = FontWeight.W600
@@ -106,24 +104,23 @@ fun AccountDetailScreen(
                             .wrapContentHeight()
                     ) {
                         ContactInfoSection(
-                            heading = "Contact info",
-                            text = email,
-                            phoneNumber = phoneNumber,
+                            text = "souvikdas2412@gmail.com",
                             modifier = Modifier
                                 .padding(bottom = 7.5.dp)
-                                .clickable { onContactClick() }
+                                .clickable { onEmailClick() },
+                            leadingIcon = Icons.Outlined.Email
                         )
 
                         ContactInfoSection(
-                            heading = "Name",
-                            text = username,
+                            text = "+91$phoneNumber",
                             modifier = Modifier
-                                .padding(top = 7.5.dp, bottom = 5.dp)
-                                .clickable { }
+                                .padding(top = 7.5.dp, bottom = 5.dp),
+                            leadingIcon = Icons.Outlined.PhoneIphone
                         )
                     }
                 }
             }
+
 
         }
     }
@@ -132,30 +129,33 @@ fun AccountDetailScreen(
 @Composable
 fun ContactInfoSection(
     modifier: Modifier = Modifier,
-    heading: String,
     text: String? = null,
-    phoneNumber: String? = null
+    leadingIcon: ImageVector? = null
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        Text(
-            text = heading,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(start = 15.dp),
-            fontWeight = FontWeight.W600,
-            fontFamily = FontFamily(Font(R.font.inter_variablefont_opsz_wght))
-        )
 
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+
+            leadingIcon?.let {
+                Icon(
+                    imageVector = leadingIcon,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(42.dp)
+                        .padding(start = 15.dp)
+                )
+            }
+
 
             text?.let {
                 Text(
                     text = text,
                     modifier = Modifier
-                        .padding(horizontal = 15.dp),
+                        .padding(start = 10.dp),
                     fontSize = 18.sp,
                     fontFamily = FontFamily(Font(R.font.inter_variablefont_opsz_wght))
                 )
@@ -169,29 +169,17 @@ fun ContactInfoSection(
                 modifier = Modifier.size(16.dp)
             )
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(13.dp))
         }
-
-        phoneNumber?.let {
-            Text(
-                text = it,
-                modifier = Modifier.padding(start = 15.dp),
-                fontSize = 18.sp,
-                fontFamily = FontFamily(Font(R.font.inter_variablefont_opsz_wght))
-            )
-
-        }
-
-
     }
 }
 
-
 @Preview
 @Composable
-fun AccountDetailScreenPreview() {
+fun ContactInfoPreview() {
     FurryRoyalsTheme {
-        AccountDetailScreen({}, {}, {}, "Souvik", "souvikdas2412@gmail.com", "+916009181866"
+        ContactInfoScreen(
+            "souvikdas2412@gmail.com", "6009181866", {}
         )
     }
 }

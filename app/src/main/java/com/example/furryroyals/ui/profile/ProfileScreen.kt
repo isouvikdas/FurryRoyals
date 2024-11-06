@@ -30,13 +30,12 @@ import com.example.furryroyals.ui.component.ProfileTextField
 
 @Composable
 fun ProfileScreen(
-    profileUiState: ProfileUiState,
+    phoneNumber: String,
     onAccountDetailClick: () -> Unit,
     onAddressClick: () -> Unit,
     onOrdersClick: () -> Unit,
     onSignOutClick: () -> Unit
 ) {
-    val phoneNumber by rememberSaveable { mutableStateOf(profileUiState.phoneNumber) }
 
     Surface(
         modifier = Modifier

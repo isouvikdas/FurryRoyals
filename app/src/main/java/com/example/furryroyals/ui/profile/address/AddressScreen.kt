@@ -21,7 +21,6 @@ fun AddressScreen() {
             .fillMaxSize(),
         color = Color.White
     ) {
-        HorizontalDivider(modifier = Modifier.height(2.dp))
         Column(
             modifier = Modifier
                 .fillMaxSize(),

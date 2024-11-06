@@ -11,21 +11,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class ProfileUiState(
-    val phoneNumber: String = "",
-    val logOutSuccess: Boolean = false,
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)
-
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _profileUiState = MutableStateFlow(ProfileUiState())
-    val profileUiState = _profileUiState.asStateFlow()
+    private var _phoneNumber = MutableStateFlow("")
+    val phoneNumber = _phoneNumber.asStateFlow()
 
     init {
         setUserPhoneNumber()
@@ -33,13 +26,11 @@ class ProfileViewModel @Inject constructor(
 
     private fun setUserPhoneNumber() {
         viewModelScope.launch {
-            val phoneNumber = userRepository.getUserPhoneNumber()
-            _profileUiState.update {
-                it.copy(
-                    phoneNumber = phoneNumber!!
-                )
+            val number = userRepository.getUserPhoneNumber()
+            number?.let {
+                _phoneNumber.value = number
             }
         }
     }
-
 }
+

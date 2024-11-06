@@ -51,7 +51,7 @@ class LoginViewModel @Inject constructor(
                         Log.d("Login", "username: $username")
                     }
                     if (email != null)  {
-                        userRepository.saveUserData(email)
+                        userRepository.saveUserEmail(email)
                         Log.d("Login", "email: $email")
                     }
                     it.copy(

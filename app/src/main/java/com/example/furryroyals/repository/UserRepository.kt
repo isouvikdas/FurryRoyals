@@ -31,7 +31,7 @@ class UserRepository(
         }
     }
 
-    fun saveUserData(email: String? = null) {
+    fun saveUserEmail(email: String? = null) {
         sharedPreferences.edit().apply {
             email?.let {
                 putString(EMAIL_KEY, it)
@@ -40,18 +40,28 @@ class UserRepository(
         }
     }
 
-    fun getUserName(): String? = sharedPreferences.getString(USERNAME_KEY, "")
+    fun saveUsername(username: String? = null) {
+        sharedPreferences.edit().apply {
+            username?.let {
+                putString(EMAIL_KEY, it)
+            }
+            apply()
+        }
+    }
+
     fun getUserId(): String? = sharedPreferences.getString(USER_ID_KEY, "")
+    fun getUserName(): String? = sharedPreferences.getString(USERNAME_KEY, "")
     fun getUserEmail(): String? = sharedPreferences.getString(EMAIL_KEY, "")
     fun getUserPhoneNumber(): String? = sharedPreferences.getString(PHONE_NUMBER_KEY, "")
 
-    private fun getToken(): String? = sharedPreferences.getString(TOKEN_KEY, "")
+
+    fun getToken(): String? = sharedPreferences.getString(TOKEN_KEY, "")
     private fun getExpirationTime(): Long = sharedPreferences.getLong(EXPIRATION_TIME_KEY, 0)
 
     fun isLoggedIn(): Boolean {
         val token = getToken()
         val expirationTime = getExpirationTime()
-        return token != null && System.currentTimeMillis() < expirationTime
+        return !token.isNullOrEmpty()  && System.currentTimeMillis() < expirationTime
     }
 
     fun clearUserData(): Result<Boolean> {

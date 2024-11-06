@@ -25,6 +25,10 @@ import com.example.furryroyals.ui.home.HomeScreen
 import com.example.furryroyals.ui.profile.ProfileScreen
 import com.example.furryroyals.ui.profile.ProfileViewModel
 import com.example.furryroyals.ui.profile.accountDetail.AccountDetailScreen
+import com.example.furryroyals.ui.profile.accountDetail.AccountDetailViewModel
+import com.example.furryroyals.ui.profile.accountDetail.contact.ContactInfoScreen
+import com.example.furryroyals.ui.profile.accountDetail.update.OtpDialog
+import com.example.furryroyals.ui.profile.accountDetail.update.UpdateEmailScreen
 import com.example.furryroyals.ui.profile.address.AddressScreen
 import com.example.furryroyals.ui.profile.orders.MyOrdersScreen
 import com.example.furryroyals.ui.profile.signout.SignOutDialog
@@ -37,6 +41,8 @@ sealed class Screen(val route: String) {
     data object AccountDetail : Screen("AccountDetail")
     data object Address : Screen("Address")
     data object MyOrders : Screen("MyOrders")
+    data object UpdateEmail : Screen("UpdateEmail")
+    data object ContactInfo : Screen("ContactInfo")
 }
 
 @Composable
@@ -56,13 +62,20 @@ fun AppNavigation(
         val loginViewModel: LoginViewModel = hiltViewModel()
         val loginUiState by loginViewModel.loginUiState.collectAsStateWithLifecycle()
 
-
-        val profileViewModel: ProfileViewModel = hiltViewModel()
-        val profileUiState by profileViewModel.profileUiState.collectAsStateWithLifecycle()
+        val accountDetailViewModel: AccountDetailViewModel = hiltViewModel()
+        val accountDetailUiState by accountDetailViewModel.accountDetailUiState.collectAsStateWithLifecycle()
+        val emailVerificationUiState by accountDetailViewModel.emailVerificationUiState.collectAsStateWithLifecycle()
+        val username = accountDetailUiState.username
+        val email = accountDetailUiState.email
+        val phoneNumber = accountDetailUiState.phoneNumber
 
         var openDialog by remember { mutableStateOf(false) }
+        var openOTPDialog by remember { mutableStateOf(false) }
 
-        NavHost(navController = navController, startDestination = BottomNavigationItems.Home.route) {
+        NavHost(
+            navController = navController,
+            startDestination = BottomNavigationItems.Home.route
+        ) {
 
             composable(route = BottomNavigationItems.Home.route) {
                 onBottomBarVisibilityChanged(true)
@@ -87,11 +100,9 @@ fun AppNavigation(
                 onButtonsVisibilityChanged(false)
                 if (isLoggedIn) {
                     ProfileScreen(
-                        profileUiState = profileUiState,
+                        phoneNumber = phoneNumber,
                         onAccountDetailClick = {
-                            navController.navigate(Screen.AccountDetail.route) {
-                                popUpTo(BottomNavigationItems.Profile.route) { inclusive = true }
-                            }
+                            navController.navigate(Screen.AccountDetail.route)
                         },
                         onOrdersClick = {
                             navController.navigate(Screen.MyOrders.route) {
@@ -107,7 +118,6 @@ fun AppNavigation(
                         onSignOutClick = { openDialog = true }
                     )
                     if (openDialog) {
-                        onBottomBarVisibilityChanged(true)
                         SignOutDialog(
                             onDismiss = { openDialog = false },
                             onSignOutConfirm = {
@@ -132,10 +142,53 @@ fun AppNavigation(
             }
 
             composable(route = Screen.AccountDetail.route) {
-                onBottomBarVisibilityChanged(true)
+                onBottomBarVisibilityChanged(false)
                 onButtonsVisibilityChanged(false)
-                AccountDetailScreen()
+                AccountDetailScreen(
+                    username = username,
+                    email = email,
+                    phoneNumber = phoneNumber,
+                    onContactClick = { navController.navigate(route = Screen.ContactInfo.route) },
+                    onUsernameClick = {},
+                    onBackClick = {}
+                )
             }
+            composable(route = Screen.ContactInfo.route) {
+                onBottomBarVisibilityChanged(false)
+                onButtonsVisibilityChanged(false)
+                ContactInfoScreen(
+                    email = email,
+                    phoneNumber = phoneNumber,
+                    onEmailClick = { navController.navigate(route = Screen.UpdateEmail.route) })
+            }
+
+            composable(route = Screen.UpdateEmail.route) {
+                onBottomBarVisibilityChanged(false)
+                onButtonsVisibilityChanged(false)
+                UpdateEmailScreen(
+                    emailVerificationUiState = emailVerificationUiState,
+                    accountDetailUiState = accountDetailUiState,
+                    accountDetailViewModel = accountDetailViewModel,
+                    onOtpSent = { openOTPDialog = true }
+                )
+
+                if (openOTPDialog) {
+                    OtpDialog(
+                        accountDetailViewModel = accountDetailViewModel,
+                        emailVerificationUiState = emailVerificationUiState,
+                        onDismiss = { openOTPDialog = false },
+                        onSuccess = {
+                            openOTPDialog = false
+                            navController.navigate(Screen.AccountDetail.route) {
+                                popUpTo(route = Screen.ContactInfo.route) { inclusive = true }
+                                popUpTo(route = Screen.UpdateEmail.route) { inclusive = true }
+                            }
+                        }
+                    )
+                }
+            }
+
+
 
             composable(route = Screen.Address.route) {
                 onBottomBarVisibilityChanged(true)
@@ -187,8 +240,6 @@ fun AppNavigation(
             }
         }
     }
-
-
 
 
 }
