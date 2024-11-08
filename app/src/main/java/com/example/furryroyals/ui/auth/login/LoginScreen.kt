@@ -79,7 +79,7 @@ fun AnimatedLoginScreen(
             LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(if (isImeVisible) 0.905f else 0.6f),
+                    .fillMaxHeight(if (isImeVisible) 0.97f else 0.8f),
                 onLoginSuccess = onLoginSuccess,
                 onSingUpClick = onSingUpClick,
                 loginViewModel = loginViewModel,

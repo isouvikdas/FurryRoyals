@@ -37,9 +37,8 @@ import com.example.furryroyals.R
 
 @Composable
 fun AccountDetailScreen(
-    onUsernameClick: () -> Unit,
+    onNameClick: () -> Unit,
     onContactClick: () -> Unit,
-    onBackClick: () -> Unit,
     username: String,
     email: String,
     phoneNumber: String
@@ -105,7 +104,7 @@ fun AccountDetailScreen(
                             .padding(vertical = 10.dp)
                             .wrapContentHeight()
                     ) {
-                        ContactInfoSection(
+                        InfoSection(
                             heading = "Contact info",
                             text = email,
                             phoneNumber = phoneNumber,
@@ -114,12 +113,12 @@ fun AccountDetailScreen(
                                 .clickable { onContactClick() }
                         )
 
-                        ContactInfoSection(
+                        InfoSection(
                             heading = "Name",
                             text = username,
                             modifier = Modifier
                                 .padding(top = 7.5.dp, bottom = 5.dp)
-                                .clickable { }
+                                .clickable { onNameClick() }
                         )
                     }
                 }
@@ -130,7 +129,7 @@ fun AccountDetailScreen(
 }
 
 @Composable
-fun ContactInfoSection(
+fun InfoSection(
     modifier: Modifier = Modifier,
     heading: String,
     text: String? = null,
@@ -191,7 +190,7 @@ fun ContactInfoSection(
 @Composable
 fun AccountDetailScreenPreview() {
     FurryRoyalsTheme {
-        AccountDetailScreen({}, {}, {}, "Souvik", "souvikdas2412@gmail.com", "+916009181866"
+        AccountDetailScreen({}, {}, "Souvik", "souvikdas2412@gmail.com", "+916009181866"
         )
     }
 }

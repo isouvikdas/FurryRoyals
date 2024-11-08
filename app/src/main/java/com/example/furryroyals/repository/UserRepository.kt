@@ -43,7 +43,7 @@ class UserRepository(
     fun saveUsername(username: String? = null) {
         sharedPreferences.edit().apply {
             username?.let {
-                putString(EMAIL_KEY, it)
+                putString(USERNAME_KEY, it)
             }
             apply()
         }

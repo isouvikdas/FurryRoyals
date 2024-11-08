@@ -32,7 +32,7 @@ interface AuthApiService {
         @Body emailRequest: EmailRequest
     ): Response<ApiResponse<Any>>
 
-    @PUT("auth/user/update-usernamez")
+    @PUT("auth/user/update-username")
     suspend fun updateUsername(
         @Header("Authorization") token: String,
         @Body usernameRequest: UsernameRequest

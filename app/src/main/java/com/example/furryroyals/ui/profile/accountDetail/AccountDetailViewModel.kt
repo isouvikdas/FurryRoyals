@@ -100,12 +100,15 @@ class AccountDetailViewModel @Inject constructor(
             if (!handleInvalidToken("Invalid token: Please login again")) return@launch
 
             val token = userRepository.getToken()!!
+            Log.d("updateUsername in vm", token)
             val result = authRepository.updateUsername(token, username)
             if (result.isSuccess) {
                 userRepository.saveUsername(username)
                 _accountDetailUiState.update {
                     it.copy(username = username, isLoading = false, errorMessage = null)
                 }
+
+                setAccountDetail()
             } else {
                 _accountDetailUiState.update {
                     it.copy(
@@ -127,8 +130,6 @@ class AccountDetailViewModel @Inject constructor(
             if (!handleInvalidToken("Invalid token: Please login again")) return@launch
 
             val token = userRepository.getToken()!!
-            Log.i("AccountDetail", token)
-            Log.i("AccountDetail", email)
             val result = authRepository.sendOtpToEmail(token, email)
             if (result.isSuccess) {
                 _emailVerificationUiState.update {
@@ -155,7 +156,7 @@ class AccountDetailViewModel @Inject constructor(
             val email = _emailVerificationUiState.value.email
             val result = authRepository.verifyEmail(token, email, otp)
             if (result.isSuccess) {
-                userRepository.saveUserData(email)
+                userRepository.saveUserEmail(email)
                 _emailVerificationUiState.update {
                     it.copy(
                         isEmailVerified = true,

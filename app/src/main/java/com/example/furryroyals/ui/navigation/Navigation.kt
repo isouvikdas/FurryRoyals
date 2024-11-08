@@ -1,5 +1,6 @@
 package com.example.furryroyals.ui.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -29,6 +30,7 @@ import com.example.furryroyals.ui.profile.accountDetail.AccountDetailViewModel
 import com.example.furryroyals.ui.profile.accountDetail.contact.ContactInfoScreen
 import com.example.furryroyals.ui.profile.accountDetail.update.OtpDialog
 import com.example.furryroyals.ui.profile.accountDetail.update.UpdateEmailScreen
+import com.example.furryroyals.ui.profile.accountDetail.update.UpdateNameScreen
 import com.example.furryroyals.ui.profile.address.AddressScreen
 import com.example.furryroyals.ui.profile.orders.MyOrdersScreen
 import com.example.furryroyals.ui.profile.signout.SignOutDialog
@@ -43,6 +45,7 @@ sealed class Screen(val route: String) {
     data object MyOrders : Screen("MyOrders")
     data object UpdateEmail : Screen("UpdateEmail")
     data object ContactInfo : Screen("ContactInfo")
+    data object UpdateUsername : Screen("UpdateUsername")
 }
 
 @Composable
@@ -128,16 +131,7 @@ fun AppNavigation(
 
                     }
                 } else {
-                    AnimatedLoginScreen(
-                        onLoginSuccess = {
-                            navController.navigate(BottomNavigationItems.Home.route) {
-                                popUpTo(BottomNavigationItems.Profile.route) { inclusive = true }
-                            }
-                        },
-                        onSingUpClick = { navController.navigate(Screen.Register.route) },
-                        loginViewModel = loginViewModel,
-                        loginUiState = loginUiState
-                    )
+                    navController.navigate(Screen.Login.route)
                 }
             }
 
@@ -146,18 +140,17 @@ fun AppNavigation(
                 onButtonsVisibilityChanged(false)
                 AccountDetailScreen(
                     username = username,
-                    email = email,
+                    email = email.ifEmpty { "Set your email" },
                     phoneNumber = phoneNumber,
                     onContactClick = { navController.navigate(route = Screen.ContactInfo.route) },
-                    onUsernameClick = {},
-                    onBackClick = {}
+                    onNameClick = { navController.navigate(route = Screen.UpdateUsername.route) }
                 )
             }
             composable(route = Screen.ContactInfo.route) {
                 onBottomBarVisibilityChanged(false)
                 onButtonsVisibilityChanged(false)
                 ContactInfoScreen(
-                    email = email,
+                    email = email.ifEmpty { "Email" },
                     phoneNumber = phoneNumber,
                     onEmailClick = { navController.navigate(route = Screen.UpdateEmail.route) })
             }
@@ -167,7 +160,7 @@ fun AppNavigation(
                 onButtonsVisibilityChanged(false)
                 UpdateEmailScreen(
                     emailVerificationUiState = emailVerificationUiState,
-                    accountDetailUiState = accountDetailUiState,
+                    savedEmail = email.ifEmpty { "Email" },
                     accountDetailViewModel = accountDetailViewModel,
                     onOtpSent = { openOTPDialog = true }
                 )
@@ -188,7 +181,14 @@ fun AppNavigation(
                 }
             }
 
-
+            composable(route = Screen.UpdateUsername.route) {
+                onBottomBarVisibilityChanged(false)
+                onButtonsVisibilityChanged(false)
+                UpdateNameScreen(
+                    accountDetailUiState = accountDetailUiState,
+                    accountDetailViewModel = accountDetailViewModel
+                )
+            }
 
             composable(route = Screen.Address.route) {
                 onBottomBarVisibilityChanged(true)
@@ -236,6 +236,20 @@ fun AppNavigation(
                     },
                     registrationViewModel = registrationViewModel,
                     registrationUiState = registrationUiState
+                )
+            }
+
+            composable(route = Screen.Login.route) {
+                AnimatedLoginScreen(
+                    onLoginSuccess = {
+                        navController.navigate(BottomNavigationItems.Home.route) {
+                            popUpTo(BottomNavigationItems.Profile.route) { inclusive = true }
+                            popUpTo(Screen.Login.route) { inclusive = true }
+                        }
+                    },
+                    onSingUpClick = { navController.navigate(Screen.Register.route) },
+                    loginViewModel = loginViewModel,
+                    loginUiState = loginUiState
                 )
             }
         }

@@ -104,7 +104,7 @@ fun ContactInfoScreen(
                             .wrapContentHeight()
                     ) {
                         ContactInfoSection(
-                            text = "souvikdas2412@gmail.com",
+                            text = email,
                             modifier = Modifier
                                 .padding(bottom = 7.5.dp)
                                 .clickable { onEmailClick() },

@@ -1,6 +1,5 @@
 package com.example.furryroyals.ui.profile.accountDetail.update
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -25,7 +23,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,32 +38,27 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.example.compose.FurryRoyalsTheme
 import com.example.furryroyals.ui.component.OtpInputField
 import com.example.furryroyals.ui.component.TextTextField
 import com.example.furryroyals.ui.isSmallScreenHeight
-import com.example.furryroyals.ui.profile.accountDetail.AccountDetailUiState
 import com.example.furryroyals.ui.profile.accountDetail.AccountDetailViewModel
 import com.example.furryroyals.ui.profile.accountDetail.EmailVerificationUiState
-import com.example.furryroyals.ui.profile.signout.SignOutDialog
 import com.example.furryroyals.ui.rememberImeState
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun UpdateEmailScreen(
     emailVerificationUiState: EmailVerificationUiState,
-    accountDetailUiState: AccountDetailUiState,
+    savedEmail: String,
     accountDetailViewModel: AccountDetailViewModel,
     onOtpSent: () -> Unit
 ) {
 
-    var email by rememberSaveable { mutableStateOf(emailVerificationUiState.email) }
+    var email by remember { mutableStateOf(emailVerificationUiState.email) }
     val isImeVisible by rememberImeState()
-    val isValidEmail = rememberSaveable(email) {
+    val isValidEmail = remember(email) {
         val gmailPattern = Regex("^[A-Za-z0-9._%+-]+@gmail\\.com\$")
         gmailPattern.matches(email) && !emailVerificationUiState.isLoading
     }
@@ -106,7 +98,7 @@ fun UpdateEmailScreen(
                 )
 
                 Text(
-                    text = "souvikdas2412@gmail.com",
+                    text = savedEmail,
                     modifier = Modifier
                         .padding(horizontal = 15.dp)
                         .align(Alignment.CenterVertically),
