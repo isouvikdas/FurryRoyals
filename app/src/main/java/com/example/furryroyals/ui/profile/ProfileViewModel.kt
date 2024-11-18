@@ -1,5 +1,6 @@
 package com.example.furryroyals.ui.profile
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.furryroyals.repository.UserRepository
@@ -12,8 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-@HiltViewModel
-class ProfileViewModel @Inject constructor(
+class ProfileViewModel (
     private val userRepository: UserRepository
 ) : ViewModel() {
 
@@ -27,6 +27,10 @@ class ProfileViewModel @Inject constructor(
     private fun setUserPhoneNumber() {
         viewModelScope.launch {
             val number = userRepository.getUserPhoneNumber()
+            number?.let {
+                Log.e("Profile", number)
+            }
+            Log.e("Profile", "")
             number?.let {
                 _phoneNumber.value = number
             }

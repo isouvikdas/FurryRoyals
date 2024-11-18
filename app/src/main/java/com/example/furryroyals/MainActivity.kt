@@ -16,12 +16,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.FurryRoyalsTheme
-import com.example.furryroyals.bottomNav.BottomAppbar
-import com.example.furryroyals.topNav.TopAppbar
-import com.example.furryroyals.ui.navigation.AppNavigation
-import dagger.hilt.android.AndroidEntryPoint
+import com.example.furryroyals.core.presentation.nav_items.bottomNav.BottomAppbar
+import com.example.furryroyals.core.presentation.nav_items.topNav.TopAppbar
+import com.example.furryroyals.navigation.AppNavigation
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

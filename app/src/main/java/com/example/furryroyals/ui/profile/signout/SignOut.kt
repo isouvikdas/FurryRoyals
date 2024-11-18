@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.compose.FurryRoyalsTheme
-import com.example.furryroyals.ui.isSmallScreenHeight
+import com.example.furryroyals.core.presentation.util.isSmallScreenHeight
 
 
 @Composable

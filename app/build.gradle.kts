@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -23,12 +24,16 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://1dbe-2405-201-ac02-d151-1404-d506-3e3f-506a.ngrok-free.app\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"https://1dbe-2405-201-ac02-d151-1404-d506-3e3f-506a.ngrok-free.app\"")
         }
     }
     compileOptions {
@@ -40,6 +45,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -53,7 +59,6 @@ android {
 
 
 dependencies {
-    val nav_version = "2.8.3"
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -65,13 +70,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.retrofit)
-    implementation(libs.okhttp)
-    implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.androidx.material.icons.extended)
-        implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -80,6 +81,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.bundles.koin)
+    implementation(libs.bundles.ktor)
 
 
 }

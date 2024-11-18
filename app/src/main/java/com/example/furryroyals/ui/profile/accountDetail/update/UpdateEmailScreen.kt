@@ -41,12 +41,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.example.furryroyals.ui.component.OtpInputField
-import com.example.furryroyals.ui.component.TextTextField
-import com.example.furryroyals.ui.isSmallScreenHeight
+import com.example.furryroyals.auth.presentation.component.OtpInputField
+import com.example.furryroyals.auth.presentation.component.TextTextField
+import com.example.furryroyals.core.presentation.util.isSmallScreenHeight
 import com.example.furryroyals.ui.profile.accountDetail.AccountDetailViewModel
 import com.example.furryroyals.ui.profile.accountDetail.EmailVerificationUiState
-import com.example.furryroyals.ui.rememberImeState
+import com.example.furryroyals.core.presentation.util.rememberImeState
 
 @Composable
 fun UpdateEmailScreen(
