@@ -1,11 +1,11 @@
-package com.example.furryroyals.auth.presentation.registration
+package com.example.furryroyals.auth.presentation.login
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,9 +17,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -35,19 +41,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.furryroyals.auth.presentation.component.OtpInputField
+import com.example.furryroyals.auth.presentation.component.TextTextField
 import com.example.furryroyals.core.presentation.util.isSmallScreenHeight
 import com.example.furryroyals.core.presentation.util.rememberImeState
 
 @Composable
-fun AnimatedOtpScreen(
+fun AnimatedLoginScreen(
     modifier: Modifier = Modifier,
-    onSuccess: () -> Unit,
-    registrationViewModel: RegistrationViewModel,
-    registrationUiState: RegistrationUiState,
-    ) {
+    loginViewModel: LoginViewModel,
+    loginUiState: LoginUiState,
+    onDismiss: () -> Unit
+) {
     var visible by remember { mutableStateOf(false) }
     val isImeVisible by rememberImeState()
 
@@ -70,13 +77,13 @@ fun AnimatedOtpScreen(
                 animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
             )
         ) {
-            OtpScreen(
+            LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(if (isImeVisible) 0.68f else 0.45f),
-                onSuccess = { onSuccess() },
-                registrationViewModel = registrationViewModel,
-                registrationUiState = registrationUiState,
+                    .fillMaxHeight(if (isImeVisible) 0.9f else 0.6f),
+                loginViewModel = loginViewModel,
+                loginUiState = loginUiState,
+                onDismiss = onDismiss
 
             )
         }
@@ -84,73 +91,75 @@ fun AnimatedOtpScreen(
 }
 
 @Composable
-fun OtpScreen(
+fun LoginScreen(
     modifier: Modifier = Modifier,
-    registrationUiState: RegistrationUiState,
-    registrationViewModel: RegistrationViewModel,
-    onSuccess: () -> Unit
+    loginUiState: LoginUiState,
+    loginViewModel: LoginViewModel,
+    onDismiss: () -> Unit
 ) {
-    val otp = rememberSaveable { mutableStateOf(registrationUiState.otp) }
-
-    LaunchedEffect(registrationUiState.isOtpVerified) {
-        if (registrationUiState.isOtpVerified) {
-            onSuccess()
-        }
-    }
+    var phoneNumber by rememberSaveable { mutableStateOf(loginUiState.phoneNumber) }
 
     Surface(
         modifier = modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp)),
+            .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)),
         color = Color.White,
         shadowElevation = 10.dp
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(Color.White),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (isSmallScreenHeight()) {
-                Spacer(modifier = Modifier.fillMaxSize(0.05f))
+                Spacer(modifier = Modifier.fillMaxSize(0.04f))
             } else {
-                Spacer(modifier = Modifier.fillMaxSize(0.1f))
+                Spacer(modifier = Modifier.fillMaxSize(0.08f))
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 3.dp, end = 10.dp)
+                    .wrapContentHeight(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Sign In",
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 25.sp,
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp),
+                    color = Color.Black
+                )
+
+                IconButton(onClick = { onDismiss() }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = null,
+                        modifier = Modifier.size(25.dp)
+                    )
+                }
+
             }
 
-            Text(
-                text = "OTP Verification",
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-                fontSize = 25.sp,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
+            if (isSmallScreenHeight()) {
+                Spacer(modifier = Modifier.fillMaxSize(0.04f))
+            } else {
+                Spacer(modifier = Modifier.fillMaxSize(0.06f))
+            }
 
-            Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-            Text(
-                text = "Please enter the 6-digit code sent to your number.",
-                fontSize = 14.sp,
-                color = Color.Black,
+            TextTextField(
+                value = phoneNumber,
+                onValueChange = { phoneNumber = it },
+                hint = "Mobile Number",
+                leadingIcon = Icons.Default.Phone,
                 modifier = Modifier
-                    .align(Alignment.Start)
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                fontWeight = FontWeight.SemiBold
-            )
-
-            Spacer(modifier = Modifier.padding(vertical = 10.dp))
-
-
-            OtpInputField(
-                otp = otp,
-                count = 6,
-                textColor = Color.Black,
-                otpBoxModifier = Modifier
-                    .border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(8.dp)
-                    )
+                keyboardType = KeyboardType.Phone,
+                textColor = Color.Black
             )
 
             Row(
@@ -161,7 +170,7 @@ fun OtpScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "By proceeding, you agree to our Terms and Conditions and Privacy Policy.",
+                    text = "We promise your information is safe with us - no spam, just good vibes!",
                     fontSize = 13.sp,
                     color = Color.Black
                 )
@@ -169,32 +178,31 @@ fun OtpScreen(
 
             Button(
                 onClick = {
-                    registrationViewModel.verifyOtp(phoneNumber = registrationUiState.phoneNumber, otp = otp.value)
+                    loginViewModel.sendOtp(phoneNumber)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-                enabled = otp.value.length == 6 && !registrationUiState.isLoading
+                enabled = phoneNumber.length == 10 && !loginUiState.isLoading
             ) {
-                if (registrationUiState.isLoading) {
+                if (loginUiState.isLoading) {
                     CircularProgressIndicator(
                         color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 } else {
                     Text(
-                        text = "Verify",
+                        text = "Send OTP",
                         fontSize = 18.sp,
                         modifier = Modifier
-                            .padding(vertical = 4.dp)
+                            .padding(vertical = 4.dp),
                     )
                 }
             }
 
-
             Spacer(modifier = Modifier.height(1.dp))
 
-            registrationUiState.errorMessage?.let { errorMessage ->
+            loginUiState.errorMessage?.let { errorMessage ->
                 Text(
                     text = errorMessage,
                     color = MaterialTheme.colorScheme.error,
@@ -202,8 +210,7 @@ fun OtpScreen(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
-
-
         }
     }
 }
+

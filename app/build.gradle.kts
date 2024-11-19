@@ -25,7 +25,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://1dbe-2405-201-ac02-d151-1404-d506-3e3f-506a.ngrok-free.app\"")
+            buildConfigField("String", "BASE_URL", "\"https://9230-2405-201-ac02-d151-1507-2751-fde6-556.ngrok-free.app\"")
         }
         release {
             isMinifyEnabled = false
@@ -33,7 +33,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://1dbe-2405-201-ac02-d151-1404-d506-3e3f-506a.ngrok-free.app\"")
+            buildConfigField("String", "BASE_URL", "\"https://9230-2405-201-ac02-d151-1507-2751-fde6-556.ngrok-free.app\"")
         }
     }
     compileOptions {
@@ -68,8 +68,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
     implementation(libs.logging.interceptor)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)

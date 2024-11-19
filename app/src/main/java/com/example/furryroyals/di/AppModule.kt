@@ -2,8 +2,8 @@ package com.example.furryroyals.di
 
 import android.content.Context
 import com.example.furryroyals.auth.data.networking.AuthApi
-
-import com.example.furryroyals.auth.presentation.registration.RegistrationViewModel
+import com.example.furryroyals.auth.presentation.login.AuthEventManager
+import com.example.furryroyals.auth.presentation.login.LoginViewModel
 import com.example.furryroyals.core.AuthViewModel
 import com.example.furryroyals.core.data.networking.HttpClientFactory
 import com.example.furryroyals.repository.UserRepository
@@ -19,9 +19,10 @@ val appModule = module {
     single { androidContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE) }
     single { AuthApi(get()) }
     single { UserRepository(get()) }
+    single { AuthEventManager() }
 
-    viewModel { AuthViewModel(get()) }
+    viewModel { AuthViewModel(get(), get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { RegistrationViewModel(get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
     viewModel { AccountDetailViewModel(get(), get()) }
 }

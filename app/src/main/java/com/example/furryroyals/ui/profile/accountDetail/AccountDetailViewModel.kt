@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.furryroyals.auth.data.networking.AuthApi
 import com.example.furryroyals.auth.data.networking.EmailRequest
 import com.example.furryroyals.auth.data.networking.UsernameRequest
-import com.example.furryroyals.auth.presentation.registration.Event
+import com.example.furryroyals.core.presentation.util.Event
 import com.example.furryroyals.core.domain.util.onError
 import com.example.furryroyals.core.domain.util.onSuccess
 import com.example.furryroyals.repository.UserRepository
@@ -52,6 +52,7 @@ class AccountDetailViewModel(
 
 
     init {
+        userRepository.clearOnInconsistentData()
         setAccountDetail()
     }
 

@@ -1,5 +1,6 @@
 package com.example.furryroyals.core.data.networking
 
+import android.util.Log
 import com.example.furryroyals.core.domain.util.NetworkError
 import io.ktor.client.statement.HttpResponse
 import kotlinx.coroutines.ensureActive
@@ -18,6 +19,7 @@ suspend inline fun <reified T> safeCall(
     } catch (e: SerializationException) {
         return Result.Error(NetworkError.SERIALIZATION)
     } catch (e: Exception) {
+        Log.e("SafeCall", "Unknown error occurred", e)
         coroutineContext.ensureActive()
         return Result.Error(NetworkError.UNKNOWN)
     }
