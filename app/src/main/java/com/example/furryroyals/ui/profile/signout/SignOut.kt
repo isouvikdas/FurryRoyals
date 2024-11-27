@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,10 +24,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.example.furryroyals.ui.isSmallScreenHeight
+import com.example.furryroyals.ui.theme.FurryRoyalsTheme
+import com.example.furryroyals.core.presentation.util.isSmallScreenHeight
 
 
 @Composable
@@ -69,7 +72,7 @@ fun SignOutDialog(
                         text = "Are you sure you want to sign out?",
                         modifier = Modifier
                             .align(Alignment.Start),
-                        fontSize = 16.sp
+                        style = MaterialTheme.typography.bodyLarge
                     )
 
                     Spacer(modifier = Modifier.height(if (isSmallScreenHeight()) 20.dp else 40.dp))
@@ -80,11 +83,13 @@ fun SignOutDialog(
                         },
                         modifier = Modifier
                             .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer)
                     ) {
                         Text(
                             text = "Sign Out",
-                            fontSize = 20.sp,
+                            style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(vertical = 1.dp)
                         )
                     }
@@ -93,13 +98,25 @@ fun SignOutDialog(
 
                     Text(
                         text = "Cancel",
-                        fontSize = 20.sp,
+                        style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .padding(vertical = 5.dp)
                             .clickable { onDismiss() }
                     )
                 }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun SignOutDialogPreview() {
+    FurryRoyalsTheme {
+        Scaffold(modifier = Modifier.fillMaxSize()) {
+            SignOutDialog(onSignOutConfirm = { /*TODO*/ }, modifier = Modifier.padding(it)) {
+
             }
         }
     }
