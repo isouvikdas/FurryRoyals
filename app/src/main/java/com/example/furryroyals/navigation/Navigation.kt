@@ -1,6 +1,5 @@
 package com.example.furryroyals.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -12,27 +11,27 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.furryroyals.auth.presentation.login.LoginViewModel
-import com.example.furryroyals.core.AuthViewModel
+import com.example.furryroyals.core.presentation.AuthViewModel
 import com.example.furryroyals.core.presentation.nav_items.bottomNav.BottomNavigationItems
 import com.example.furryroyals.ui.cart.CartScreen
-import com.example.furryroyals.ui.category.CategoryScreen
-import com.example.furryroyals.ui.home.HomeScreen
+import com.example.furryroyals.product.presentation.produtc_list.HomeScreen
 import com.example.furryroyals.ui.profile.ProfileScreen
-import com.example.furryroyals.ui.profile.accountDetail.AccountDetailScreen
-import com.example.furryroyals.ui.profile.accountDetail.AccountDetailViewModel
-import com.example.furryroyals.ui.profile.accountDetail.contact.ContactInfoScreen
-import com.example.furryroyals.ui.profile.accountDetail.update.OtpDialog
-import com.example.furryroyals.ui.profile.accountDetail.update.UpdateEmailScreen
-import com.example.furryroyals.ui.profile.accountDetail.update.UpdateNameScreen
+import com.example.furryroyals.auth.presentation.account_detail.AccountDetailScreen
+import com.example.furryroyals.auth.presentation.account_detail.AccountDetailViewModel
+import com.example.furryroyals.auth.presentation.account_detail.contact.ContactInfoScreen
+import com.example.furryroyals.auth.presentation.account_detail.update.OtpDialog
+import com.example.furryroyals.auth.presentation.account_detail.update.UpdateEmailScreen
+import com.example.furryroyals.auth.presentation.account_detail.update.UpdateNameScreen
+import com.example.furryroyals.product.presentation.produtc_list.ProductListScreen
+import com.example.furryroyals.product.presentation.produtc_list.ProductViewModel
 import com.example.furryroyals.ui.profile.address.AddressScreen
 import com.example.furryroyals.ui.profile.orders.MyOrdersScreen
 import com.example.furryroyals.ui.profile.signout.SignOutDialog
 import org.koin.androidx.compose.koinViewModel
-import kotlin.math.log
+import timber.log.Timber
 
 sealed class Screen(val route: String) {
-    data object Register : Screen("Register")
-    data object Otp : Screen("Otp")
+    data object ProductList : Screen("ProductList")
     data object AccountDetail : Screen("AccountDetail")
     data object Address : Screen("Address")
     data object MyOrders : Screen("MyOrders")
@@ -47,6 +46,9 @@ fun AppNavigation(
     onBottomBarVisibilityChanged: (Boolean) -> Unit,
     onButtonsVisibilityChanged: (Boolean) -> Unit
 ) {
+    val productViewModel = koinViewModel<ProductViewModel>()
+    val productListState by productViewModel.productListState.collectAsStateWithLifecycle()
+    val categoryListState by productViewModel.categoryListState.collectAsStateWithLifecycle()
     val authViewModel = koinViewModel<AuthViewModel>()
     val isLoggedIn by authViewModel.isLoggedIn.collectAsStateWithLifecycle()
     val resetKey by authViewModel.resetKey.collectAsStateWithLifecycle()
@@ -60,8 +62,9 @@ fun AppNavigation(
         val email = accountDetailUiState.email
         val phoneNumber = accountDetailUiState.phoneNumber
 
-        Log.i("shared", "phonenumber $phoneNumber")
-        Log.i("shared", "username $username")
+
+        Timber.tag("shared").i("phonenumber %s", phoneNumber)
+        Timber.tag("shared").i("username %s", username)
 
         var openDialog by remember { mutableStateOf(false) }
         var openOTPDialog by remember { mutableStateOf(false) }
@@ -74,7 +77,10 @@ fun AppNavigation(
             composable(route = BottomNavigationItems.Home.route) {
                 onBottomBarVisibilityChanged(true)
                 onButtonsVisibilityChanged(false)
-                HomeScreen(navController = navController)
+                HomeScreen(
+                    productListState = productListState,
+                    categoryListState = categoryListState
+                )
             }
 
             composable(route = BottomNavigationItems.Cart.route) {
@@ -83,10 +89,13 @@ fun AppNavigation(
                 CartScreen()
             }
 
-            composable(route = BottomNavigationItems.Category.route) {
+            composable(route = BottomNavigationItems.WatchList.route) {
                 onBottomBarVisibilityChanged(true)
                 onButtonsVisibilityChanged(false)
-                CategoryScreen()
+                ProductListScreen(
+                    productViewModel = productViewModel,
+                    productListState = productListState
+                )
             }
 
             composable(route = BottomNavigationItems.Profile.route) {
@@ -155,8 +164,8 @@ fun AppNavigation(
                 onButtonsVisibilityChanged(false)
                 UpdateEmailScreen(
                     emailVerificationUiState = emailVerificationUiState,
-                    savedEmail = email.ifEmpty { "Email" },
                     accountDetailViewModel = accountDetailViewModel,
+                    openOtpDialog = openOTPDialog,
                     onOtpSent = { openOTPDialog = true }
                 )
 
@@ -170,6 +179,7 @@ fun AppNavigation(
                             navController.navigate(Screen.AccountDetail.route) {
                                 popUpTo(route = Screen.ContactInfo.route) { inclusive = true }
                                 popUpTo(route = Screen.UpdateEmail.route) { inclusive = true }
+                                accountDetailViewModel.resetEmailVerificationUiState()
                             }
                         }
                     )
@@ -197,30 +207,14 @@ fun AppNavigation(
                 MyOrdersScreen()
             }
 
-//            composable(route = Screen.Register.route) {
-//                onBottomBarVisibilityChanged(true)
-//                onButtonsVisibilityChanged(false)
-//                AnimatedRegisterScreen(
-//                    onSuccess = { navController.navigate(Screen.Otp.route) },
-//                    registrationViewModel = registrationViewModel,
-//                    registrationUiState = registrationUiState
-//                )
-//            }
-//
-//            composable(route = Screen.Otp.route) {
-//                onBottomBarVisibilityChanged(true)
-//                onButtonsVisibilityChanged(false)
-//                AnimatedOtpScreen(
-//                    onSuccess = {
-//                        navController.navigate(BottomNavigationItems.Home.route) {
-//                            popUpTo(route = Screen.Otp.route) { inclusive = true }
-//                            popUpTo(route = Screen.Register.route) { inclusive = true }
-//                        }
-//                    },
-//                    registrationViewModel = registrationViewModel,
-//                    registrationUiState = registrationUiState
-//                )
-//            }
+            composable(route = Screen.ProductList.route) {
+                onBottomBarVisibilityChanged(true)
+                onButtonsVisibilityChanged(false)
+                ProductListScreen(
+                    productViewModel = productViewModel,
+                    productListState = productListState
+                )
+            }
 
         }
     }

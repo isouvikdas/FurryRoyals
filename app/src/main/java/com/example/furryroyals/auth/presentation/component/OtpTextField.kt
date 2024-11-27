@@ -42,7 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.compose.FurryRoyalsTheme
+import com.example.furryroyals.ui.theme.FurryRoyalsTheme
 import kotlinx.coroutines.launch
 
 private data class OtpField(
@@ -234,7 +234,7 @@ private fun OtpBox(
                 .onGloballyPositioned {
                     onFocusSet(focusRequest)
                 },
-            textStyle = MaterialTheme.typography.titleLarge.copy(
+            textStyle = MaterialTheme.typography.headlineMedium.copy(
                 textAlign = TextAlign.Center,
                 color = textColor
             ),

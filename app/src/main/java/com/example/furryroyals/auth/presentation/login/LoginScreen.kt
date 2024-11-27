@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -183,17 +184,23 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-                enabled = phoneNumber.length == 10 && !loginUiState.isLoading
+                enabled = phoneNumber.length == 10 && !loginUiState.isLoading,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceDim,
+                    disabledContentColor = MaterialTheme.colorScheme.surfaceContainerLowest
+                )
             ) {
                 if (loginUiState.isLoading) {
                     CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.onTertiaryContainer,
                         modifier = Modifier.size(24.dp)
                     )
                 } else {
                     Text(
                         text = "Send OTP",
-                        fontSize = 18.sp,
+                        style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
                             .padding(vertical = 4.dp),
                     )

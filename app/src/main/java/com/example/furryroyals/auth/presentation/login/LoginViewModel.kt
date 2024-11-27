@@ -3,13 +3,12 @@ package com.example.furryroyals.auth.presentation.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.furryroyals.auth.data.networking.AuthApi
-import com.example.furryroyals.auth.data.networking.request.PhoneRequest
-import com.example.furryroyals.auth.data.networking.request.VerifyAndLoginRequest
+import com.example.furryroyals.auth.data.networking.request.LoginRequest
+import com.example.furryroyals.auth.domain.AuthApi
 import com.example.furryroyals.core.domain.util.onError
 import com.example.furryroyals.core.domain.util.onSuccess
 import com.example.furryroyals.core.presentation.util.Event
-import com.example.furryroyals.repository.UserRepository
+import com.example.furryroyals.core.domain.UserRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -59,7 +58,7 @@ class LoginViewModel(
     fun sendOtp(phoneNumber: String) {
         viewModelScope.launch {
             _loginUiState.update { it.copy(isLoading = true) }
-            val result = authApi.sendOtp(PhoneRequest("+91$phoneNumber"))
+            val result = authApi.sendOtp(LoginRequest("+91$phoneNumber"))
             result.onSuccess { apiResponse ->
                 _loginUiState.update {
                     if (apiResponse.success) {
@@ -87,7 +86,7 @@ class LoginViewModel(
     fun verifyOtp(phoneNumber: String, otp: String) {
         viewModelScope.launch {
             _loginUiState.update { it.copy(isLoading = true) }
-            val result = authApi.verifyOtp(VerifyAndLoginRequest("+91$phoneNumber", otp))
+            val result = authApi.verifyOtp(LoginRequest("+91$phoneNumber", otp))
             result.onSuccess { apiResponse ->
                 _loginUiState.update {
                     if (apiResponse.success) {

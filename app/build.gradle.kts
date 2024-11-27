@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("kotlin-kapt")
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -25,7 +25,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://9230-2405-201-ac02-d151-1507-2751-fde6-556.ngrok-free.app\"")
+            buildConfigField("String", "BASE_URL", "\"https://846c-2405-201-ac02-d151-8567-f55-5c83-f8b4.ngrok-free.app\"")
         }
         release {
             isMinifyEnabled = false
@@ -33,7 +33,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://9230-2405-201-ac02-d151-1507-2751-fde6-556.ngrok-free.app\"")
+            buildConfigField("String", "BASE_URL", "\"https://846c-2405-201-ac02-d151-8567-f55-5c83-f8b4.ngrok-free.app\"")
         }
     }
     compileOptions {
@@ -55,7 +55,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-}
+}val room_version = "2.6.1"
 
 
 dependencies {
@@ -72,6 +72,8 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material)
+    implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.androidx.lifecycle.process)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -83,9 +85,24 @@ dependencies {
     implementation(libs.bundles.koin)
     implementation(libs.bundles.ktor)
 
+    //room
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.paging)
+
+    //paging
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.paging.compose)
+
+    //coil
+    implementation(libs.coil.compose)
+
+    //timber
+    implementation(libs.timber)
+
 
 }
 
-kapt {
-    correctErrorTypes = true
-}
+//kapt {
+//    correctErrorTypes = true
+//}

@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +29,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.compose.FurryRoyalsTheme
+import com.example.furryroyals.ui.theme.FurryRoyalsTheme
 import com.example.furryroyals.R
 import com.example.furryroyals.core.presentation.nav_items.bottomNav.BottomNavigationItems
 
@@ -76,7 +74,7 @@ fun TopAppbar(
                 if (cartButtonVisibility) {
                     BottomNavigationItems.Cart?.let {
                         NavigationBarItem(
-                            icon = { Icon(imageVector = it.icon!!, contentDescription = null) },
+                            icon = { Icon(imageVector = it.selectedIcon!!, contentDescription = null) },
                             selected = currentRoute == it.route,
                             onClick = {
                                 if (currentRoute != it.route) { // Prevent redundant navigation

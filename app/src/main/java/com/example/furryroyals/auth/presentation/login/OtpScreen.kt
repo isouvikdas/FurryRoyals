@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -189,7 +190,7 @@ fun OtpScreen(
             ) {
                 Text(
                     text = "By proceeding, you agree to our Terms and Conditions and Privacy Policy.",
-                    fontSize = 13.sp,
+                    style = MaterialTheme.typography.labelMedium,
                     color = Color.Black,
                     fontWeight = FontWeight.Light
                 )
@@ -205,11 +206,17 @@ fun OtpScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp),
-                enabled = otp.value.length == 6 && !loginUiState.isLoading
+                enabled = otp.value.length == 6 && !loginUiState.isLoading,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceDim,
+                    disabledContentColor = MaterialTheme.colorScheme.surfaceContainerLowest
+                )
             ) {
                 if (loginUiState.isLoading) {
                     CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.onTertiaryContainer,
                         modifier = Modifier.size(20.dp)
                     )
                 } else {

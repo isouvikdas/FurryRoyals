@@ -19,6 +19,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -60,7 +61,7 @@ fun TextTextField(
         shape = RoundedCornerShape(12.dp),
         modifier = modifier,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-        label = { Text(text = hint) },
+        label = { Text(text = hint, color = Color.Black) },
         leadingIcon = {
             Icon(
                 imageVector = leadingIcon,
@@ -140,13 +141,12 @@ fun ProfileTextField(
             Image(
                 imageVector = leadingIcon,
                 contentDescription = null,
-                modifier = Modifier.size(28.dp)
+                modifier = Modifier.size(25.dp)
             )
 
             Text(
                 text = text,
-                fontSize = 17.sp,
-                color = Color.Black,
+                style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
 
