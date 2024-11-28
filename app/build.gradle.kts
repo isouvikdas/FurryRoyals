@@ -25,7 +25,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://846c-2405-201-ac02-d151-8567-f55-5c83-f8b4.ngrok-free.app\"")
+            buildConfigField("String", "BASE_URL", "\"https://aedd-2405-201-ac02-d151-7f25-112c-1931-8e79.ngrok-free.app\"")
         }
         release {
             isMinifyEnabled = false
@@ -33,7 +33,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://846c-2405-201-ac02-d151-8567-f55-5c83-f8b4.ngrok-free.app\"")
+            buildConfigField("String", "BASE_URL", "\"https://aedd-2405-201-ac02-d151-7f25-112c-1931-8e79.ngrok-free.app\"")
         }
     }
     compileOptions {
@@ -99,6 +99,9 @@ dependencies {
 
     //timber
     implementation(libs.timber)
+
+    implementation(libs.accompanist.systemuicontroller)
+
 
 
 }

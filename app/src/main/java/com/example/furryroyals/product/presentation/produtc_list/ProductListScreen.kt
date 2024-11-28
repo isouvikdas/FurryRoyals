@@ -23,9 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
 fun ProductListScreen(
+    navController: NavController,
     productViewModel: ProductViewModel,
     productListState: ProductListState
 ) {
@@ -56,10 +58,10 @@ fun ProductListScreen(
             ) {
                 items(productListState.productList) { product ->
                     ProductItem(
-                        modifier = Modifier.padding(5.dp), // Add padding for spacing
-                        product = product
-                    ) {
-                    }
+                        modifier = Modifier.padding(5.dp),
+                        product = product,
+                        navController = navController
+                    )
                 }
             }
         }

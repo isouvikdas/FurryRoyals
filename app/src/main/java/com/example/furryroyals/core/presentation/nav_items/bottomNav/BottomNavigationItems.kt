@@ -2,14 +2,18 @@ package com.example.furryroyals.core.presentation.nav_items.bottomNav
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.CoPresent
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.CoPresent
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -36,14 +40,15 @@ sealed class BottomNavigationItems(
     data object Cart: BottomNavigationItems(
         route = "Cart",
         title = "Cart",
-        selectedIcon = Icons.Filled.ShoppingCart,
-        unselectedIcon = Icons.Outlined.ShoppingCart
+        selectedIcon = Icons.Filled.ShoppingBag,
+        unselectedIcon = Icons.Outlined.ShoppingBag
+
     )
 
     data object Profile: BottomNavigationItems(
         route = "Profile",
         title = "Profile",
-        selectedIcon = Icons.Filled.AccountCircle,
-        unselectedIcon = Icons.Outlined.AccountCircle
+        selectedIcon = Icons.Filled.CoPresent,
+        unselectedIcon = Icons.Outlined.CoPresent
     )
 }

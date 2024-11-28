@@ -8,8 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.furryroyals.auth.presentation.login.LoginViewModel
 import com.example.furryroyals.core.presentation.AuthViewModel
 import com.example.furryroyals.core.presentation.nav_items.bottomNav.BottomNavigationItems
@@ -22,6 +24,7 @@ import com.example.furryroyals.auth.presentation.account_detail.contact.ContactI
 import com.example.furryroyals.auth.presentation.account_detail.update.OtpDialog
 import com.example.furryroyals.auth.presentation.account_detail.update.UpdateEmailScreen
 import com.example.furryroyals.auth.presentation.account_detail.update.UpdateNameScreen
+import com.example.furryroyals.product.presentation.produtc_detail.ProductDetailScreen
 import com.example.furryroyals.product.presentation.produtc_list.ProductListScreen
 import com.example.furryroyals.product.presentation.produtc_list.ProductViewModel
 import com.example.furryroyals.ui.profile.address.AddressScreen
@@ -32,6 +35,7 @@ import timber.log.Timber
 
 sealed class Screen(val route: String) {
     data object ProductList : Screen("ProductList")
+    data object ProductDetail: Screen("ProductDetail/{productId}")
     data object AccountDetail : Screen("AccountDetail")
     data object Address : Screen("Address")
     data object MyOrders : Screen("MyOrders")
@@ -44,7 +48,7 @@ sealed class Screen(val route: String) {
 fun AppNavigation(
     navController: NavHostController,
     onBottomBarVisibilityChanged: (Boolean) -> Unit,
-    onButtonsVisibilityChanged: (Boolean) -> Unit
+    onButtonsVisibilityChanged: (Boolean) -> Unit,
 ) {
     val productViewModel = koinViewModel<ProductViewModel>()
     val productListState by productViewModel.productListState.collectAsStateWithLifecycle()
@@ -79,7 +83,8 @@ fun AppNavigation(
                 onButtonsVisibilityChanged(false)
                 HomeScreen(
                     productListState = productListState,
-                    categoryListState = categoryListState
+                    categoryListState = categoryListState,
+                    navController = navController
                 )
             }
 
@@ -93,12 +98,26 @@ fun AppNavigation(
                 onBottomBarVisibilityChanged(true)
                 onButtonsVisibilityChanged(false)
                 ProductListScreen(
+                    navController = navController,
                     productViewModel = productViewModel,
                     productListState = productListState
                 )
             }
+            composable(
+                route = Screen.ProductDetail.route,
+                arguments = listOf(navArgument("productId") {type = NavType.StringType})
+            ) {
+                val productId = it.arguments?.getString("productId") ?: return@composable
+                onBottomBarVisibilityChanged(false)
+                onButtonsVisibilityChanged(false)
+                ProductDetailScreen(
+                    navController = navController,
+                    productId = productId
+                )
+            }
 
-            composable(route = BottomNavigationItems.Profile.route) {
+
+                composable(route = BottomNavigationItems.Profile.route) {
                 onBottomBarVisibilityChanged(true)
                 onButtonsVisibilityChanged(false)
                 ProfileScreen(
@@ -212,7 +231,8 @@ fun AppNavigation(
                 onButtonsVisibilityChanged(false)
                 ProductListScreen(
                     productViewModel = productViewModel,
-                    productListState = productListState
+                    productListState = productListState,
+                    navController = navController
                 )
             }
 
