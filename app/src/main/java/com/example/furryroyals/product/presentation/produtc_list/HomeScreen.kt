@@ -46,6 +46,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.furryroyals.ui.theme.FurryRoyalsTheme
 import com.example.furryroyals.product.domain.Category
 import com.example.furryroyals.product.domain.Product
@@ -53,7 +55,8 @@ import com.example.furryroyals.product.domain.Product
 @Composable
 fun HomeScreen(
     productListState: ProductListState,
-    categoryListState: CategoryListState
+    categoryListState: CategoryListState,
+    navController: NavController
 ) {
     Surface(
         modifier = Modifier
@@ -84,18 +87,18 @@ fun HomeScreen(
                     HomeProductRow(
                         products = productListState.productList,
                         title = "New Launches",
-                        maxItems = 4
-                    ) {
-                    }
+                        maxItems = 4,
+                        navController = navController
+                    )
                 }
 
                 item {
                     HomeProductRow(
                         products = productListState.productList,
                         title = "Featured Products",
-                        maxItems = 3
-                    ) {
-                    }
+                        maxItems = 3,
+                        navController = navController
+                    )
                 }
             }
         }
@@ -124,7 +127,11 @@ fun SearchBar(
             Text(text = "Search here", style = MaterialTheme.typography.bodyLarge)
         },
         leadingIcon = {
-            Icon(imageVector = Icons.Default.Search, contentDescription = "Search Icon")
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "Search Icon",
+                modifier = Modifier.size(28.dp)
+            )
         },
         trailingIcon = {
             if (query.isNotEmpty() || active) {
@@ -145,7 +152,7 @@ fun SearchBar(
                 }
             }
         },
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(30.dp),
         singleLine = true,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color.DarkGray,
@@ -228,11 +235,13 @@ fun HomeProductRow(
     products: List<Product>,
     title: String,
     maxItems: Int,
-    onClick: (Product) -> Unit
+    navController: NavController
 ) {
-    Column(modifier = Modifier
-        .wrapContentHeight()
-        .padding(bottom = 20.dp)) {
+    Column(
+        modifier = Modifier
+            .wrapContentHeight()
+            .padding(bottom = 20.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -277,7 +286,7 @@ fun HomeProductRow(
                     ProductItem(
                         modifier = Modifier.padding(start = 20.dp),
                         product = product,
-                        onClick
+                        navController = navController
                     )
                 }
             }
@@ -292,7 +301,8 @@ private fun HomeScreenPreview() {
     FurryRoyalsTheme {
         HomeScreen(
             productListState = ProductListState(),
-            categoryListState = CategoryListState()
+            categoryListState = CategoryListState(),
+            navController = rememberNavController()
         )
     }
 }

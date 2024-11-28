@@ -1,5 +1,6 @@
 package com.example.furryroyals.product.presentation.produtc_list
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,16 +25,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.furryroyals.R
 import com.example.furryroyals.product.domain.Product
 
 @Composable
-fun ProductItem(modifier: Modifier = Modifier, product: Product, onClick: (Product) -> Unit) {
+fun ProductItem(navController: NavController,
+                modifier: Modifier = Modifier, product: Product) {
     ElevatedCard(
-        onClick = { onClick(product) },
+        onClick = { navController.navigate("ProductDetail/${product.id}")},
         modifier = modifier
             .wrapContentHeight()
             .width(165.dp),
@@ -53,12 +59,22 @@ fun ProductItem(modifier: Modifier = Modifier, product: Product, onClick: (Produ
                 shape = RoundedCornerShape(topEnd = 16.dp, topStart = 16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.LightGray.copy(alpha = 0.2f))
             ) {
-                AsyncImage(
-                    model = product.firstImageUri,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
+                if (product.firstImageUri == null) {
+                    Image(
+                        painter = painterResource(id = R.drawable.login), // Replace with your image resource
+                        contentDescription = "Product Image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit
+                    )
+                } else {
+                    AsyncImage(
+                        model = product.firstImageUri,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
+                }
+
             }
             Spacer(modifier = Modifier.size(10.dp))
 
